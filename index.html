@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veto — the circuit breaker for doomscrollers</title>
+<meta name="description" content="Veto is the circuit breaker for doomscrollers. Cut the loop and earn your screen time back. Join the waitlist for early access on Android.">
+
+<!-- Open Graph / social -->
+<meta property="og:title" content="Veto — the circuit breaker for doomscrollers">
+<meta property="og:description" content="Cut the loop. Earn your screen time back. Join the waitlist.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#EAEEF3; --surface:#F4F7FA; --hairline:#E0E4EA;
+    --mint:#1452FF; --mintDeep:#CFDDFF; --cobalt:#4F70D8; --cobaltDeep:#DDE4F5;
+    --deep:#08080F; --deepblue:#16306E; --rose:#B8284B; --roseTint:#F3D6DD;
+    --text:#0A1420; --textDim:#5A6470; --textFaint:#9AA0A8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',system-ui,sans-serif; color:var(--text); background:var(--ink);
+    -webkit-font-smoothing:antialiased; line-height:1.5;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- nav ---------- */
+  nav{display:flex; align-items:center; justify-content:space-between; padding:28px 0;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:30px; letter-spacing:-1px; color:var(--text);}
+  .brand .vmark{width:30px; height:32px;}
+  .nav-cta{font-weight:600; font-size:16px; color:var(--mint); text-decoration:none; padding:10px 20px; border:2px solid var(--mintDeep); border-radius:999px; transition:.15s;}
+  .nav-cta:hover{background:var(--mintDeep);}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative; overflow:hidden; padding:40px 0 90px; text-align:center;
+    background:radial-gradient(circle 720px at 50% -120px, rgba(20,82,255,0.14), rgba(20,82,255,0) 60%);}
+  .badge-stage{width:230px; height:270px; margin:0 auto 8px; display:flex; align-items:flex-end; justify-content:center;
+    filter:drop-shadow(0 22px 40px rgba(20,82,255,0.22));}
+  .eyebrow{display:inline-flex; align-items:center; gap:10px; background:#fff; border:2px solid var(--hairline); border-radius:999px; padding:8px 18px; font-size:14px; font-weight:600; color:var(--textDim); margin-bottom:26px;}
+  .eyebrow .dot{width:9px; height:9px; border-radius:999px; background:var(--rose);}
+  h1{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; letter-spacing:-2.5px; line-height:1.02;
+    font-size:clamp(44px, 8vw, 80px); max-width:14ch; margin:0 auto 22px;}
+  h1 .hl{color:var(--mint);}
+  .subline{font-size:clamp(19px,2.6vw,24px); color:var(--textDim); font-weight:500; max-width:34ch; margin:0 auto 40px;}
+
+  /* ---------- form ---------- */
+  form{display:flex; gap:12px; max-width:520px; margin:0 auto; flex-wrap:wrap;}
+  input[type=email]{flex:1; min-width:220px; font-size:17px; font-family:inherit; padding:18px 22px; border:2px solid var(--hairline); border-radius:16px; background:#fff; color:var(--text); outline:none; transition:.15s;}
+  input[type=email]:focus{border-color:var(--mint); box-shadow:0 0 0 4px rgba(20,82,255,0.12);}
+  button{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:#fff; background:var(--mint); border:none; border-radius:16px; padding:18px 30px; cursor:pointer; white-space:nowrap; box-shadow:0 14px 30px rgba(20,82,255,0.32); transition:.15s;}
+  button:hover{transform:translateY(-1px); box-shadow:0 18px 38px rgba(20,82,255,0.40);}
+  button:active{transform:translateY(0);}
+  .reassure{margin-top:16px; font-size:14px; color:var(--textFaint);}
+  .form-success{display:none; max-width:520px; margin:0 auto; background:#fff; border:2px solid var(--mintDeep); border-radius:16px; padding:22px; font-size:17px; font-weight:600; color:var(--text);}
+  .form-success.show{display:block;}
+
+  /* ---------- proof strip ---------- */
+  .strip{padding:64px 0; border-top:1px solid var(--hairline);}
+  .strip h2{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:clamp(28px,4vw,40px); letter-spacing:-1.5px; text-align:center; margin-bottom:48px;}
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .step{background:#fff; border:2px solid var(--hairline); border-radius:24px; padding:34px 28px;}
+  .step .n{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:20px; color:var(--mint); margin-bottom:14px;}
+  .step h3{font-size:21px; font-weight:700; margin-bottom:8px; letter-spacing:-.5px;}
+  .step p{font-size:16px; color:var(--textDim);}
+
+  /* ---------- no-snooze line ---------- */
+  .punch{padding:80px 0; text-align:center;}
+  .punch p{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(26px,4.5vw,46px); letter-spacing:-1.5px; max-width:18ch; margin:0 auto; line-height:1.08;}
+  .punch .who{margin-top:26px; font-size:17px; color:var(--textDim);}
+
+  /* ---------- bottom CTA ---------- */
+  .final{background:var(--deep); color:#fff; border-radius:36px; margin:0 24px 40px; padding:72px 24px; text-align:center;
+    background:radial-gradient(circle 600px at 50% 0%, var(--deepblue), var(--deep) 70%);}
+  .final h2{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:clamp(30px,5vw,52px); letter-spacing:-2px; margin-bottom:14px;}
+  .final p{color:rgba(255,255,255,0.6); font-size:18px; margin-bottom:36px;}
+  .final input[type=email]{background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.16); color:#fff;}
+  .final input[type=email]::placeholder{color:rgba(255,255,255,0.45);}
+
+  footer{text-align:center; padding:40px 0 56px; color:var(--textFaint); font-size:15px;}
+  footer .tag{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; color:var(--textDim); font-size:18px; margin-bottom:14px;}
+  footer a{color:var(--textDim); text-decoration:none;}
+  footer a:hover{color:var(--mint);}
+
+  @media(max-width:720px){
+    .steps{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="brand">
+      <svg class="vmark" viewBox="0 0 96 104" fill="none"><path d="M10 40 L40 92 L86 12" stroke="#1452FF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Veto
+    </div>
+    <a class="nav-cta" href="#join">Join the waitlist</a>
+  </nav>
+</div>
+
+<!-- ======================= HERO ======================= -->
+<header class="hero">
+  <div class="wrap">
+    <div class="badge-stage">
+      <!-- Badge the honey badger -->
+      <svg width="230" height="270" viewBox="0 0 460 540" fill="none">
+        <defs><linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#1452FF" stop-opacity="0"/></linearGradient></defs>
+        <ellipse cx="230" cy="506" rx="146" ry="24" fill="#1452FF" opacity="0.10"/>
+        <path d="M230 226 C322 226 364 296 364 372 C364 466 304 504 230 504 C156 504 96 466 96 372 C96 296 138 226 230 226 Z" fill="#1452FF"/>
+        <path d="M230 226 C300 226 338 278 352 344 C300 326 160 326 108 344 C122 278 160 226 230 226 Z" fill="#FFFFFF"/>
+        <ellipse cx="230" cy="416" rx="74" ry="80" fill="#EAF0FF"/>
+        <circle cx="132" cy="150" r="24" fill="#1452FF"/>
+        <circle cx="328" cy="150" r="24" fill="#1452FF"/>
+        <path d="M230 92 C312 92 360 146 360 212 C360 280 304 318 230 318 C156 318 100 280 100 212 C100 146 148 92 230 92 Z" fill="#1452FF"/>
+        <path d="M230 92 C312 92 360 146 360 212 C360 280 304 318 230 318 C156 318 100 280 100 212 C100 146 148 92 230 92 Z" fill="url(#sheen)" opacity="0.16"/>
+        <path d="M230 92 C312 92 360 146 360 198 C360 206 359 212 356 218 C320 206 300 202 268 200 C262 176 250 162 230 162 C210 162 198 176 192 200 C160 202 140 206 104 218 C101 212 100 206 100 198 C100 146 148 92 230 92 Z" fill="#FFFFFF"/>
+        <circle cx="184" cy="214" r="25" fill="#fff"/>
+        <circle cx="276" cy="214" r="25" fill="#fff"/>
+        <circle cx="188" cy="219" r="11" fill="#0A1420"/>
+        <circle cx="280" cy="219" r="11" fill="#0A1420"/>
+        <circle cx="192" cy="214" r="4" fill="#fff"/>
+        <circle cx="284" cy="214" r="4" fill="#fff"/>
+        <rect x="156" y="184" width="56" height="14" rx="7" fill="#0E2150" transform="rotate(14 184 191)"/>
+        <rect x="248" y="184" width="56" height="14" rx="7" fill="#0E2150" transform="rotate(-14 276 191)"/>
+        <path d="M230 244 C262 244 282 266 282 290 C282 314 260 330 230 330 C200 330 178 314 178 290 C178 266 198 244 230 244 Z" fill="#16306E"/>
+        <rect x="208" y="256" width="44" height="28" rx="14" fill="#0A1420"/>
+        <path d="M230 286 V306 M204 308 Q230 328 256 308" stroke="#EAF0FF" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <rect x="104" y="350" width="54" height="116" rx="27" fill="#0E2150"/>
+        <circle cx="131" cy="462" r="32" fill="#1452FF"/>
+        <path d="M114 480 v16 M131 484 v16 M148 480 v16" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
+        <g transform="rotate(20 360 240)">
+          <rect x="344" y="150" width="32" height="150" rx="16" fill="#16306E"/>
+          <rect x="298" y="120" width="124" height="62" rx="26" fill="#DDE4F5"/>
+          <rect x="298" y="120" width="124" height="62" rx="26" fill="url(#sheen)" opacity="0.3"/>
+          <rect x="312" y="120" width="11" height="62" rx="5" fill="#16306E" opacity="0.5"/>
+          <rect x="397" y="120" width="11" height="62" rx="5" fill="#16306E" opacity="0.5"/>
+        </g>
+        <path d="M300 372 C300 332 322 312 348 304 L372 352 C346 360 326 372 326 408 Z" fill="#0E2150"/>
+        <circle cx="356" cy="300" r="34" fill="#1452FF"/>
+        <path d="M340 286 l-10 -8 M356 280 v-13 M372 286 l10 -8" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="eyebrow"><span class="dot"></span> Early access · Android first</div>
+    <h1>Veto is the <span class="hl">circuit breaker</span> for doomscrollers.</h1>
+    <p class="subline">Cut the loop. Earn your screen time back.</p>
+
+    <form id="join" action="#">
+      <input type="email" name="email" placeholder="you@email.com" required autocomplete="email">
+      <button type="submit">Join the waitlist</button>
+    </form>
+    <p class="reassure">No spam. One email the day it launches.</p>
+  </div>
+</header>
+
+<!-- ======================= HOW ======================= -->
+<section class="strip">
+  <div class="wrap">
+    <h2>How Veto breaks the loop</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <h3>You open the app</h3>
+        <p>Reach for Instagram, TikTok, the usual. Veto opens instead of it.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h3>You do the habit</h3>
+        <p>Read, train, study, whatever you set. The thing you actually meant to do.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <h3>You get your time</h3>
+        <p>Finish the habit and the app unlocks. Skip it and it stays shut.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PUNCH ======================= -->
+<section class="punch">
+  <div class="wrap">
+    <p>Every other blocker has a snooze button. Veto doesn't.</p>
+    <p class="who">Built for students, late-night scrollers, and anyone who's outsmarted every soft app blocker they've tried.</p>
+  </div>
+</section>
+
+<!-- ======================= FINAL CTA ======================= -->
+<section class="final">
+  <h2>Stop scrolling your day away.</h2>
+  <p>Join the waitlist and get in before everyone else.</p>
+  <form action="#">
+    <input type="email" name="email" placeholder="you@email.com" required autocomplete="email">
+    <button type="submit">Join the waitlist</button>
+  </form>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="tag">Veto. You against your phone.</div>
+    <a href="mailto:vetohabits@gmail.com">vetohabits@gmail.com</a> &nbsp;·&nbsp;
+    <a href="https://vetohabits.github.io/veto-privacy/">Privacy</a>
+  </div>
+</footer>
+
+<script>
+  /* =====================================================================
+     WAITLIST → GOOGLE FORM  (free, data lands in your Google Sheet)
+     ---------------------------------------------------------------------
+     One-time setup (see DEPLOY.md for screenshots-level detail):
+       1. Create a Google Form with ONE "Short answer" question: "Email".
+       2. Top-right ⋮  →  "Get pre-filled link".  Type test@test.com, Submit,
+          then "Copy link".  The copied URL contains  entry.1234567890=test...
+          That number is your GFORM_ENTRY below.
+       3. Open the normal form link. It ends in  /viewform .
+          Replace  /viewform  with  /formResponse  → that's your GFORM_ACTION.
+     Paste both values below and the page is live.
+     ===================================================================== */
+  var GFORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSfbe_cFcHPzLqpEXzAcn-ZPRynPiuAf6cTU6Iz8yItXx-Zl8A/formResponse";
+  var GFORM_ENTRY  = "entry.1496517566";
+
+  document.querySelectorAll('form').forEach(function(f){
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var input = f.querySelector('input[type=email]');
+      var email = input && input.value.trim();
+      if (!email) return;
+
+      var done = function(){
+        var note = document.createElement('p');
+        note.textContent = "You're on the list. Badge will let you know when it's ready.";
+        note.style.cssText = "font-weight:600;font-size:17px;margin:4px auto 0;max-width:520px;";
+        f.replaceWith(note);
+      };
+
+      if (GFORM_ACTION.indexOf('YOUR_FORM_ID') !== -1){
+        // Not connected yet — confirm the UX without sending anywhere.
+        console.warn('Waitlist not wired: set GFORM_ACTION / GFORM_ENTRY.');
+        done();
+        return;
+      }
+
+      var data = new FormData();
+      data.append(GFORM_ENTRY, email);
+      // Google Forms blocks reading the response (CORS); no-cors still records it.
+      fetch(GFORM_ACTION, {method:'POST', mode:'no-cors', body:data}).finally(done);
+    });
+  });
+</script>
+
+</body>
+</html>
